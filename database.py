@@ -12,17 +12,22 @@ CREATE TABLE IF NOT EXISTS saved (
 """)
 
 def save_product(pid, name, score):
-    cursor.execute("INSERT OR IGNORE INTO saved VALUES (?, ?, ?)", (pid, name, score))
-    conn.commit()
+    try:
+        cursor.execute("INSERT OR IGNORE INTO saved VALUES (?, ?, ?)", (pid, name, score))
+        conn.commit()
+    except:
+        pass
 
 def unsave_product(pid):
-    cursor.execute("DELETE FROM saved WHERE id=?", (pid,))
-    conn.commit()
+    try:
+        cursor.execute("DELETE FROM saved WHERE id=?", (pid,))
+        conn.commit()
+    except:
+        pass
 
 def get_saved_ids():
-    cursor.execute("SELECT id FROM saved")
-    return [x[0] for x in cursor.fetchall()]
-
-def get_saved():
-    cursor.execute("SELECT name, score FROM saved ORDER BY score DESC")
-    return cursor.fetchall()
+    try:
+        cursor.execute("SELECT id FROM saved")
+        return [x[0] for x in cursor.fetchall()]
+    except:
+        return []
