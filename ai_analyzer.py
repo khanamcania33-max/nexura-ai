@@ -1,36 +1,34 @@
 import os
 
-def analyze_product(product_name):
+def analyze_product(name):
     try:
         from openai import OpenAI
 
         api_key = os.getenv("OPENAI_API_KEY")
-
         if not api_key:
-            return fallback(product_name)
+            return fallback(name)
 
         client = OpenAI(api_key=api_key)
 
-        response = client.chat.completions.create(
+        res = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": f"Analyze this product: {product_name}"}
-            ]
+            messages=[{"role": "user", "content": f"Analyze {name} for Amazon opportunity"}]
         )
 
-        return response.choices[0].message.content
+        return res.choices[0].message.content
 
     except:
-        return fallback(product_name)
+        return fallback(name)
 
 
-def fallback(product_name):
+def fallback(name):
     return f"""
-🔍 AI Insight (Safe Mode)
+🔍 AI Insight
 
-Product: {product_name}
+{name}
 
-• Trend: Growing niche  
-• Opportunity: Medium-High  
-• Idea: Improve branding + bundle  
+• Demand: Good  
+• Competition: Moderate  
+• Opportunity: High  
+• Suggestion: Improve design + bundle
 """
